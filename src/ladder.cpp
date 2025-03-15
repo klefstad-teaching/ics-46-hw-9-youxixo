@@ -8,6 +8,11 @@ void error(string word1, string word2, string msg)
 
 bool edit_distance_within(const std::string& str1, const std::string& str2, int d)
 {
+    if(str1 == str2)
+    {
+        return true;
+    }
+
     if(d ==1)
     {
         return is_adjacent(str1, str2);
@@ -17,6 +22,9 @@ bool edit_distance_within(const std::string& str1, const std::string& str2, int 
 
 bool is_adjacent(const string& word1, const string& word2)
 {
+    if(word1 == word2)
+        return true;
+
     int len1 = (int)word1.size();
     int len2 = (int)word2.size();
 
@@ -73,7 +81,7 @@ vector<string> generate_word_ladder(const string& begin_word,
 {
     if(begin_word == end_word)
     {
-        return {};
+        return {begin_word};
     }
 
     queue<vector<string>> ladder_queue;

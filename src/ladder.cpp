@@ -79,7 +79,7 @@ vector<string> generate_word_ladder(const string& begin_word,
                                     const string& end_word, 
                                     const set<string>& word_list)
 {
-    if(begin_word == end_word)
+    if (begin_word == end_word) 
     {
         return {};
     }
@@ -90,7 +90,7 @@ vector<string> generate_word_ladder(const string& begin_word,
     set<string> visited;
     visited.insert(begin_word);
 
-    while(!ladder_queue.empty())
+    while (!ladder_queue.empty()) 
     {
         auto current_ladder = ladder_queue.front();
         ladder_queue.pop();
@@ -99,46 +99,52 @@ vector<string> generate_word_ladder(const string& begin_word,
 
         set<string> adjacent_words;
 
-        for(int i =0; i< last_word.size(); i++)
+        // Generate substitutions
+        for (int i = 0; i < last_word.size(); ++i) 
         {
             string temp = last_word;
-            for(char c = 'a'; c <= 'z'; ++c)
+            for (char c = 'a'; c <= 'z'; ++c) 
             {
-                temp[i]= c;
-                if(temp != last_word && word_list.count(temp))
+                temp[i] = c;
+                if (temp != last_word && word_list.count(temp)) 
                 {
                     adjacent_words.insert(temp);
                 }
             }
         }
 
-        for(int i =0; i< last_word.size(); i++)
+        // Generate insertions (fixed loop condition)
+        for (int i = 0; i <= last_word.size(); ++i) 
         {
-            for(char c = 'a'; c <= 'z'; ++c)
+            for (char c = 'a'; c <= 'z'; ++c) 
             {
                 string temp = last_word.substr(0, i) + c + last_word.substr(i);
-                if(word_list.count(temp))
+                if (word_list.count(temp)) 
                 {
                     adjacent_words.insert(temp);
                 }
             }
         }
 
-        for(int i =0; i< last_word.size(); ++i)
+        // Generate deletions
+        for (int i = 0; i < last_word.size(); ++i) 
         {
-            string temp = last_word.substr(0,i) + last_word.substr(i+1);
-            if(word_list.count(temp))
+            string temp = last_word.substr(0, i) + last_word.substr(i + 1);
+            if (word_list.count(temp)) 
             {
                 adjacent_words.insert(temp);
             }
         }
 
-        for (const auto& w : adjacent_words) {
-            if (!visited.count(w)) {
+        for (const auto& w : adjacent_words) 
+        {
+            if (!visited.count(w)) 
+            {
                 vector<string> new_ladder = current_ladder;
                 new_ladder.push_back(w);
 
-                if (w == end_word) {
+                if (w == end_word) 
+                {
                     return new_ladder;
                 }
 
@@ -147,6 +153,7 @@ vector<string> generate_word_ladder(const string& begin_word,
             }
         }
     }
+
     return {};
 }
 

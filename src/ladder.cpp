@@ -81,7 +81,7 @@ vector<string> generate_word_ladder(const string& begin_word,
 {
     if(begin_word == end_word)
     {
-        return {begin_word};
+        return {};
     }
 
     queue<vector<string>> ladder_queue;
@@ -95,17 +95,50 @@ vector<string> generate_word_ladder(const string& begin_word,
         auto current_ladder = ladder_queue.front();
         ladder_queue.pop();
 
-        const string &last_word = current_ladder.back();
+        const string& last_word = current_ladder.back();
 
-        for(auto &w : word_list)
+        set<string> adjacent_words;
+
+        for(int i =0; i< last_word.size(); i++)
         {
-            if(!visited.count(w) && is_adjacent(last_word, w))
+            string temp = last_word;
+            for(char c = 'a'; c <= 'z'; ++c)
             {
+                temp[i]= c;
+                if(temp != last_word && word_list.count(temp))
+                {
+                    adjacent_words.insert(temp);
+                }
+            }
+        }
+
+        for(int i =0; i< last_word.size(); i++)
+        {
+            for(char c = 'a'; c <= 'z'; ++c)
+            {
+                string temp = last_word.substr(0, i) + c + last_word.substr(i);
+                if(word_list.count(temp))
+                {
+                    adjacent_words.insert(temp);
+                }
+            }
+        }
+
+        for(int i =0; i< last_word.size(); ++i)
+        {
+            string temp = last_word.substr(0,i) + last_word.substr(i+1);
+            if(word_list.count(temp))
+            {
+                adjacent_words.insert(temp);
+            }
+        }
+
+        for (const auto& w : adjacent_words) {
+            if (!visited.count(w)) {
                 vector<string> new_ladder = current_ladder;
                 new_ladder.push_back(w);
 
-                if(w == end_word)
-                {
+                if (w == end_word) {
                     return new_ladder;
                 }
 
@@ -146,13 +179,10 @@ void print_word_ladder(const vector<string>& ladder)
         cout << "No word ladder found." << endl;
         return;
     }
-    for(int i =0; i < (int)ladder.size(); i++)
+    cout<< "Word ladder found: ";
+    for(const auto& w : ladder)
     {
-        cout << ladder[i];
-        if(i + 1 < (int)ladder.size())
-        {
-            cout << " -> ";
-        }
+        cout << w << " ";
     }
     cout << endl;
 }
